@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Chaty</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #020108;
+            font-family: 'Times New Roman', Times, serif;
+            color: #e2e8f0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        canvas#bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .formula-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .formula {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.06);
+            font-size: 18px;
+            font-style: italic;
+            white-space: nowrap;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) rotate(-12deg);
+                opacity: 0;
+            }
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            background: radial-gradient(ellipse at 70% 20%, rgba(188, 19, 254, 0.08) 0%, transparent 55%),
+                radial-gradient(ellipse at 30% 80%, rgba(0, 243, 255, 0.06) 0%, transparent 55%);
+            pointer-events: none;
+        }
+
+        .grid-lines {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            background-image:
+                linear-gradient(rgba(188, 19, 254, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(188, 19, 254, 0.02) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+        }
+
+        .page-wrapper {
+            position: relative;
+            z-index: 3;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-top {
+            position: fixed;
+            top: 28px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .brand-top h1 {
+            font-size: 42px;
+            font-weight: bold;
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, #bc13fe, #00f3ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-top p {
+            font-size: 12px;
+            letter-spacing: 6px;
+            color: rgba(255, 255, 255, 0.25);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 36px;
+            background: rgba(8, 8, 24, 0.6);
+            backdrop-filter: blur(28px) saturate(1.5);
+            -webkit-backdrop-filter: blur(28px) saturate(1.5);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            box-shadow: 0 0 60px rgba(188, 19, 254, 0.03), 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: cardEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(24px) scale(0.98);
+        }
+
+        @keyframes cardEntry {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 28px;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #bc13fe;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            margin-left: 2px;
+        }
+
+        .input-wrap {
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .input-wrap:focus-within {
+            border-color: #bc13fe;
+            box-shadow: 0 0 18px rgba(188, 19, 254, 0.12);
+        }
+
+        .input-wrap i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .input-wrap:focus-within i {
+            color: #bc13fe;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 14px 16px 14px 46px;
+            color: #fff;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px;
+        }
+
+        .input-wrap input::placeholder {
+            color: rgba(255, 255, 255, 0.18);
+        }
+
+        .submit-btn {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 12px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #fff;
+            background: linear-gradient(135deg, #bc13fe, #8e2de2);
+            box-shadow: 0 4px 20px rgba(188, 19, 254, 0.25);
+            transition: all 0.3s ease;
+            margin-top: 6px;
+        }
+
+        .submit-btn:hover {
+            box-shadow: 0 6px 30px rgba(188, 19, 254, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .footer-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .footer-link a {
+            color: #bc13fe;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer-link a:hover {
+            text-shadow: 0 0 10px rgba(188, 19, 254, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="bg"></canvas>
+    <div class="overlay"></div>
+    <div class="grid-lines"></div>
+    <div class="formula-layer" id="formulaLayer"></div>
+
+    <div class="brand-top">
+        <h1>CHATY</h1>
+        <p>Physics & Chemistry Core</p>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="signup-container">
+            <h2 class="page-title">Sign Up</h2>
+            <form method="POST">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="name" required placeholder="Enter your name" autocomplete="name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" required placeholder="Enter your email" autocomplete="email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" required placeholder="Create a password"
+                            autocomplete="new-password">
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">SIGN UP</button>
+            </form>
+            <div class="footer-link">
+                Already have an account? <a href="/login">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // === FLOATING FORMULA ANIMATIONS ===
+        const formulas = [
+            'E = mc²', 'F = ma', 'PV = nRT', 'ΔG = ΔH − TΔS',
+            'λ = h/p', 'E = hν', 'F = kq₁q₂/r²', 'V = IR',
+            'H₂O', 'NaCl', 'CH₄', 'C₆H₁₂O₆', 'NH₃', 'H₂SO₄',
+            'ΔE = q + w', 'pH = −log[H⁺]', 'K = Ae^(−Ea/RT)',
+            'ψ = Ae^(ikx)', 'S = k ln W', 'P₁V₁ = P₂V₂',
+            'Fe₂O₃', 'CO₂', 'KMnO₄', 'CaCO₃', 'Al₂O₃',
+            '∇ × E = −∂B/∂t', 'Σ F = dp/dt', 'W = Fd cos θ',
+            'v = u + at', 's = ut + ½at²', 'v² = u² + 2as',
+            'τ = r × F', 'ΔS ≥ 0', 'mol = g / M',
+            'C₂H₅OH', 'HCl', 'NaOH', 'BaSO₄', 'MgCl₂'
+        ];
+        const layer = document.getElementById('formulaLayer');
+        function spawnFormula() {
+            const el = document.createElement('div');
+            el.className = 'formula';
+            el.textContent = formulas[Math.floor(Math.random() * formulas.length)];
+            el.style.left = Math.random() * 100 + '%';
+            el.style.fontSize = (14 + Math.random() * 14) + 'px';
+            el.style.animationDuration = (12 + Math.random() * 18) + 's';
+            el.style.color = `rgba(255,255,255,${0.03 + Math.random() * 0.05})`;
+            layer.appendChild(el);
+            setTimeout(() => el.remove(), 32000);
+        }
+        for (let i = 0; i < 25; i++) setTimeout(() => spawnFormula(), i * 400);
+        setInterval(spawnFormula, 1200);
+
+        // === THREE.JS 3D MOLECULAR BACKGROUND ===
+        const canvas = document.getElementById('bg');
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 6;
+
+        const cyan = new THREE.Color(0x00f3ff);
+        const purple = new THREE.Color(0xbc13fe);
+        const gold = new THREE.Color(0xffd700);
+
+        // Molecular bond structure
+        const moleculeGroup = new THREE.Group();
+        const atomPositions = [];
+        for (let i = 0; i < 12; i++) {
+            const pos = new THREE.Vector3(
+                (Math.random() - 0.5) * 8,
+                (Math.random() - 0.5) * 8,
+                (Math.random() - 0.5) * 6
+            );
+            atomPositions.push(pos);
+            const geo = new THREE.SphereGeometry(0.12, 16, 16);
+            const col = i % 3 === 0 ? cyan : i % 3 === 1 ? purple : gold;
+            const mat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.25 });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.copy(pos);
+            moleculeGroup.add(mesh);
+        }
+        // Bonds between nearby atoms
+        for (let i = 0; i < atomPositions.length; i++) {
+            for (let j = i + 1; j < atomPositions.length; j++) {
+                if (atomPositions[i].distanceTo(atomPositions[j]) < 4) {
+                    const points = [atomPositions[i], atomPositions[j]];
+                    const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+                    const lineMat = new THREE.LineBasicMaterial({ color: 0x00f3ff, transparent: true, opacity: 0.06 });
+                    moleculeGroup.add(new THREE.Line(lineGeo, lineMat));
+                }
+            }
+        }
+        scene.add(moleculeGroup);
+
+        // Ambient particles
+        const ambCount = 1400;
+        const aP = new Float32Array(ambCount * 3), aC = new Float32Array(ambCount * 3), aS = new Float32Array(ambCount);
+        for (let i = 0; i < ambCount; i++) {
+            aP[i * 3] = (Math.random() - 0.5) * 22; aP[i * 3 + 1] = (Math.random() - 0.5) * 22; aP[i * 3 + 2] = (Math.random() - 0.5) * 14;
+            aS[i] = Math.random() * 0.002 + 0.0008;
+            const c = Math.random() < 0.35 ? cyan : Math.random() < 0.6 ? purple : gold;
+            aC[i * 3] = c.r; aC[i * 3 + 1] = c.g; aC[i * 3 + 2] = c.b;
+        }
+        const aGeo = new THREE.BufferGeometry();
+        aGeo.setAttribute('position', new THREE.BufferAttribute(aP, 3));
+        aGeo.setAttribute('color', new THREE.BufferAttribute(aC, 3));
+        scene.add(new THREE.Points(aGeo, new THREE.PointsMaterial({
+            size: 0.02, vertexColors: true, transparent: true, opacity: 0.6,
+            blending: THREE.AdditiveBlending, depthWrite: false
+        })));
+
+        let mx = 0, my = 0;
+        document.addEventListener('mousemove', e => {
+            mx = (e.clientX / window.innerWidth - 0.5) * 2;
+            my = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            moleculeGroup.rotation.y += 0.001;
+            moleculeGroup.rotation.x += 0.0005;
+            const ap = aGeo.attributes.position.array;
+            for (let i = 0; i < ambCount; i++) { ap[i * 3 + 1] -= aS[i]; if (ap[i * 3 + 1] < -11) ap[i * 3 + 1] = 11; }
+            aGeo.attributes.position.needsUpdate = true;
+            camera.position.x += (mx * 0.4 - camera.position.x) * 0.015;
+            camera.position.y += (-my * 0.25 - camera.position.y) * 0.015;
+            camera.lookAt(scene.position);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+
+</html>
