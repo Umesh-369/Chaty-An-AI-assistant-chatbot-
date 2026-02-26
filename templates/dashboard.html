@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Chaty</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #060612;
+            font-family: 'Times New Roman', Times, serif;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            height: 64px;
+            background: rgba(8, 8, 24, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #00f3ff, #bc13fe);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 16px rgba(0, 243, 255, 0.25);
+        }
+
+        .nav-logo i {
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .nav-title {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #00f3ff, #bc13fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-user {
+            text-align: right;
+        }
+
+        .nav-user-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-user-name {
+            font-size: 15px;
+            font-weight: bold;
+            color: #00f3ff;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            margin-bottom: 48px;
+        }
+
+        .welcome-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .welcome-title span {
+            color: #00f3ff;
+        }
+
+        .welcome-sub {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(0, 243, 255, 0.2);
+            background: rgba(0, 243, 255, 0.03);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .stat-icon.cyan {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            color: #00f3ff;
+        }
+
+        .stat-icon.purple {
+            background: rgba(188, 19, 254, 0.1);
+            border: 1px solid rgba(188, 19, 254, 0.2);
+            color: #bc13fe;
+        }
+
+        .stat-icon.gold {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.35);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .cta-content {
+            max-width: 520px;
+        }
+
+        .cta-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .cta-desc {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.4);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #00f3ff, #0088ff);
+            color: #020108;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            padding: 16px 36px;
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 0 4px 24px rgba(0, 243, 255, 0.25);
+            transition: all 0.3s;
+        }
+
+        .cta-btn:hover {
+            box-shadow: 0 8px 36px rgba(0, 243, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .cta-visual {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(0, 243, 255, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .cta-visual i {
+            font-size: 56px;
+            color: rgba(0, 243, 255, 0.2);
+        }
+
+        .cta-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px dashed rgba(0, 243, 255, 0.1);
+            border-radius: 50%;
+            animation: spin 25s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .navbar {
+                padding: 0 16px;
+            }
+
+            .main-content {
+                padding: 24px 16px;
+            }
+
+            .welcome-title {
+                font-size: 26px;
+            }
+
+            .cta-section {
+                padding: 28px;
+            }
+
+            .cta-visual {
+                display: none;
+            }
+
+            .nav-user {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="nav-logo"><i class="fas fa-atom"></i></div>
+            <span class="nav-title">CHATY</span>
+        </div>
+        <div class="nav-right">
+            <div class="nav-user">
+                <div class="nav-user-label">Logged in as</div>
+                <div class="nav-user-name">{{ user.name }}</div>
+            </div>
+            <a href="/logout" class="logout-btn">LOGOUT</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="welcome-section">
+            <h1 class="welcome-title">Welcome back, <span>{{ user.name }}</span></h1>
+            <p class="welcome-sub">Your physics & chemistry AI assistant is ready.</p>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon cyan"><i class="fas fa-flask"></i></div>
+                <div class="stat-label">Domain</div>
+                <div class="stat-value">Physics & Chemistry</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple"><i class="fas fa-bolt"></i></div>
+                <div class="stat-label">AI Model</div>
+                <div class="stat-value">Gemini 2.0 Flash</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon gold"><i class="fas fa-shield-alt"></i></div>
+                <div class="stat-label">Security</div>
+                <div class="stat-value">Encrypted & Hashed</div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2 class="cta-title">Start a Conversation</h2>
+                <p class="cta-desc">Ask about quantum mechanics, thermodynamics, organic synthesis, molecular
+                    structures, and more. Chaty is optimized for physics and chemistry queries.</p>
+                <a href="/chat_app" class="cta-btn">OPEN CHATY <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="cta-visual">
+                <i class="fas fa-comments"></i>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
