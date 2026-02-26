@@ -18,9 +18,9 @@ except Exception as e:
 
 db = firestore.client()
 
-client = genai.Client(api_key="AIzaSyCuw5lqCvRHVtj1BONbcnRVbRk1rWCG1PE")
+client = genai.Client(api_key="YOUR GEMINI API KEY")
 app = Flask(__name__)
-app.secret_key = 'chaty-super-secret-key-2026'
+app.secret_key = 'Your key'
 
 @app.route('/')
 def home():
@@ -114,4 +114,5 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == "__main__":
+
     app.run(port=8080, debug=True)
